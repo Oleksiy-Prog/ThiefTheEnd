@@ -1,34 +1,64 @@
 class Cop(angar: Angar) : Person(angar) {
 
-    val eyeCop = Eyes()
-    var called = false
+    private var waiting = 0
+
 
     init {
         MakeCop()
     }
 
-    fun GoToCam() {
-        called = true
+
+    fun protectChest() {
+
+        x = angar.chest.x
+        y = angar.chest.y
+        waiting = 5
+
     }
 
-    fun fight(thief: Thief) {
+
+    private fun fight(thief: Thief) {
+
         if (strange > thief.strange) {
-            println("Мент попустил петушару")
+            thief.isAlive = false
+            println("Вор пойман")
+        }else {
+            angar.grup.remove(angar.cop)
         }
+
     }
+
 
     override fun action() {
-        if (eyePerson.find(this, angar.thief)) {
-            fight(angar.thief)
+
+        when (waiting){
+            0 -> if(!check()){ wolk() }
+            else -> {
+                waiting--
+                check()
+            }
         }
-        wolk()
     }
 
+
+    private fun check(): Boolean{
+
+        if (eyePerson.find(this, angar.thief)) {
+            fight(angar.thief)
+            return true
+        }
+
+        return false
+    }
+
+
     private fun MakeCop() {
+
         val temp = readFile("Cop.txt")
         x = temp[0].toInt()
         y = temp[1].toInt()
         strange = temp[2].toInt()
+
     }
 
 }

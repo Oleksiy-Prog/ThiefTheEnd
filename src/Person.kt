@@ -1,36 +1,43 @@
-abstract class Person(val angar: Angar) : Abstract() {
+abstract class Person(val angar: Angar) : Units() {
 
     var strange : Int = 0
     var eyePerson = Eyes()
-    var pastX = Int.MAX_VALUE
-    var pastY = Int.MAX_VALUE
-    val usedPath = mutableSetOf<Pair<Int, Int>>()
+    private var pastX = Int.MAX_VALUE//координаты прошлой клетки
+    private var pastY = Int.MAX_VALUE
+    private val usedPath = mutableSetOf<Pair<Int, Int>>()//посещённые клетки
 
     fun wolk () {
         usedPath.add(Pair(x, y))
-        val paths = mutableSetOf<Pair<Int, Int>>()
+        val allPaths = mutableSetOf<Pair<Int, Int>>()//все варинты дальнейшего пути
+        val paths = mutableSetOf<Pair<Int, Int>>()//возможные варинты дальнейшего пути
 
-        for (i in x-1..x+1) {
-            for (j in y-1..y+1) {
-                if (angar.map[i*10 + j] == 1 && !usedPath.contains(Pair(i, j))) {
-                    paths.add(Pair(i, j))
+
+
+        allPaths.add(Pair(x-1, y))
+        allPaths.add(Pair(x+1, y))
+        allPaths.add(Pair(x, y-1))
+        allPaths.add(Pair(x, y+1))
+
+        allPaths.forEach { item ->
+            if (angar.map[item.first*10 + item.second] == 1 && !usedPath.contains(item)){
+                paths.add(item)
+            }
+        }
+
+        if (paths.isEmpty()){//ищем посещенные клетки, но не предыдущую
+            allPaths.forEach { item ->
+                if (angar.map[item.first*10 + item.second] == 1 && item != Pair(pastX, pastY)){
+                    paths.add(item)
                 }
             }
         }
-        if (paths.isEmpty()) {
-            for (i in x-1..x+1) {
-                for (j in y-1..y+1) {
-                    if (angar.map[i*10 + j] == 1 && Pair(i, j) != Pair(pastX, pastY)) {
-                        paths.add(Pair(i, j))
-                    }
-                }
-            }
-        }
-        if (paths.isEmpty()) {
+
+        if (paths.isEmpty()){//если ничего не нашли - идём откуда пришли
             paths.add(Pair(pastX, pastY))
         }
 
-        val ran = paths.random()
+
+        val ran = paths.random()//выбор случайной клетки из найденых возможных
         pastX = x
         pastY = y
         x = ran.first

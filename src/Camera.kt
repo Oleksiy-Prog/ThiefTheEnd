@@ -1,7 +1,4 @@
-import java.lang.Math.*
-
-
-class Camera(val thief: Thief, val cop: Cop): Abstract() {
+class Camera(val angar: Angar): Units() {
 
     private var visibility : Int = 0
     private val eyeCam = Eyes()
@@ -10,17 +7,26 @@ class Camera(val thief: Thief, val cop: Cop): Abstract() {
         MakeCamera()
     }
 
+
     override fun action(){
-        if (eyeCam.find(this, thief)) {
-            cop?.GoToCam()
+
+        if (eyeCam.find(this, angar.thief)) {
+            if (visibility > angar.thief.stealth) {
+                println("Вор замечен")
+                angar.cop.protectChest()
+            }
         }
+
     }
 
     private fun MakeCamera() {
+
         val temp = readFile("Camera.txt")
         x = temp[0].toInt()
         y = temp[1].toInt()
         visibility = temp[2].toInt()
+        eyeCam.range = temp[3].toInt()
+
     }
 
 }

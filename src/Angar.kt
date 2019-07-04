@@ -1,29 +1,31 @@
 class Angar {
 
     val map : MutableList<Int> = mutableListOf()
-    var grup : MutableList<Abstract> = mutableListOf()
+    var grup : MutableList<Units> = mutableListOf()
     val chest: Chest
     val camera: Camera
     val thief : Thief
     val cop : Cop
 
     init {
+
         CreateMap()
         chest = Chest()
         thief = Thief(this)
         cop = Cop(this)
-        camera = Camera(thief, cop)
+        camera = Camera(this)
 
         grup = mutableListOf(thief, cop, camera)
 
     }
 
-    /*fun changes(){
-        units.forEach { elem ->
+    fun changes(){
 
-
+        grup.forEach { elem ->
+            elem.action()
         }
-    }*/
+
+    }
 
     fun CreateMap(){
 

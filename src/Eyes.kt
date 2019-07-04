@@ -1,16 +1,21 @@
 import java.lang.Math.*
 
 class Eyes {
-    var range: Int
+
+    var range: Int = 0
+
 
     init {
-        range = 2
+        range = 1
     }
 
-    fun find (cur:Abstract, abstract: Abstract) : Boolean{
-        if (sqrt(pow((cur.x - abstract?.x).toDouble(), 2.0) + pow((cur.y - abstract?.y).toDouble(), 2.0)) < range){
+
+    fun find (cur: Units, units: Units) : Boolean {
+
+        if (sqrt(pow((cur.x - units.x).toDouble(), 2.0) + pow((cur.y - units.y).toDouble(), 2.0)) <= range){
             return true
         }
+
         return false
     }
 
